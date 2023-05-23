@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerControls : MonoBehaviour
 {
-
+    [SerializeField] private LayerMask wallLayer;
     private void Move(Vector3 moveDir)
     {
         transform.position += moveDir;
@@ -21,7 +22,8 @@ public class PlayerControls : MonoBehaviour
     public void OnMoveHorizontal(InputValue value)
     {
         var input = value.Get<Vector2>();
-        if (input != Vector2.zero)
+        if (input != Vector2.zero && 
+            !Physics.Raycast(transform.position, input, 1f, wallLayer))
         {
             Move(input);
             Flip(input.x);
@@ -31,7 +33,8 @@ public class PlayerControls : MonoBehaviour
     public void OnMoveVertical(InputValue value)
     {
         var input = value.Get<Vector2>();
-        if (input != Vector2.zero)
+        if (input != Vector2.zero && 
+            !Physics.Raycast(transform.position, input, 1f, wallLayer))
         {
             Move(input);
         }
