@@ -96,15 +96,15 @@ public class MazeConfigUI : MonoBehaviour
     {
         if (!int.TryParse(UserRoomsInput.text, out int newRooms))
         {
-            return new Tuple<bool, MazeConfiguration>(false, ConfigurationHandler.Instance.CurrentConfig);
+            return new Tuple<bool, MazeConfiguration>(false, MazeConfigUtils.CurrentConfig);
         }
         if (!int.TryParse(UserThreatsInput.text, out int newThreats))
         {
-            return new Tuple<bool, MazeConfiguration>(false, ConfigurationHandler.Instance.CurrentConfig);
+            return new Tuple<bool, MazeConfiguration>(false, MazeConfigUtils.CurrentConfig);
         }
         if (!int.TryParse(UserTreasureInput.text, out int newTreasureInput))
         {
-            return new Tuple<bool, MazeConfiguration>(false, ConfigurationHandler.Instance.CurrentConfig);
+            return new Tuple<bool, MazeConfiguration>(false, MazeConfigUtils.CurrentConfig);
         }
 
         return new Tuple<bool, MazeConfiguration>(true, new MazeConfiguration(newRooms, newThreats, newTreasureInput));

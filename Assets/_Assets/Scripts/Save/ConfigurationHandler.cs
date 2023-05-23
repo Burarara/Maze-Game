@@ -16,7 +16,6 @@ public class ConfigurationHandler : MonoBehaviour
     public TextAsset ConfigurationSave;
 
     public static ConfigurationHandler Instance;
-    public MazeConfiguration CurrentConfig;
     
 
 #region MonoBehaviour
@@ -37,9 +36,7 @@ public class ConfigurationHandler : MonoBehaviour
     {
         MazeConfiguration loadConfig = LoadConfig();
         MazeConfigUI.Instance.UpdateUI(loadConfig);
-        Debug.Log($"Loading Settings: \n" +
-                  $"Rooms: {loadConfig.Rooms}, Threats: {loadConfig.Threats}, Treasures: {loadConfig.Treasures}");
-        CurrentConfig = loadConfig;
+        MazeConfigUtils.CurrentConfig = loadConfig;
     }
     
 #endregion
@@ -50,6 +47,7 @@ public class ConfigurationHandler : MonoBehaviour
     {
         string saveData = JsonUtility.ToJson(newConfig);
         File.WriteAllText(AssetDatabase.GetAssetPath(ConfigurationSave), saveData);
+        MazeConfigUtils.CurrentConfig = newConfig;
     }
 
     public MazeConfiguration LoadConfig()
