@@ -51,7 +51,7 @@ public class ConfigurationHandler : MonoBehaviour
     public void SaveConfig(MazeConfiguration newConfig)
     {
         string saveData = JsonUtility.ToJson(newConfig);
-        File.WriteAllText(AssetDatabase.GetAssetPath(ConfigurationSave), saveData);
+        File.WriteAllText(Application.dataPath + "/_Assets/Resources/ConfigurationSave.txt", saveData);
         MazeConfigUtils.CurrentConfig = newConfig;
     }
 
