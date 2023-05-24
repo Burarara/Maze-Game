@@ -36,6 +36,11 @@ public class MazeConfigUI : MonoBehaviour
             Instance = this;
         }
     }
+    
+    private void OnDestroy()
+    {
+        Instance = null;
+    }
 
     public void UpdateUI(MazeConfiguration newConfig)
     {

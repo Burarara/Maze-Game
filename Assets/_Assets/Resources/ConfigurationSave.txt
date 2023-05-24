@@ -1,1 +1,1 @@
-{"Rooms":90,"Threats":20,"Treasures":50}
+{"Rooms":10,"Threats":4,"Treasures":6}

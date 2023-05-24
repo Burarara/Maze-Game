@@ -20,21 +20,25 @@ public class Maze : MonoBehaviour
 {
     public static Maze Instance;
     
+    [Header("Rooms")]
     [SerializeField] private GameObject ExitTile;
     [SerializeField] private GameObject FloorTile;
     [SerializeField] private GameObject DefaultTile;
     [SerializeField] private List<GameObject> Rooms = new List<GameObject>();
     [SerializeField] private WallTile[] WallTiles;
 
-    //Rooms
-    
     //Threats
     
     //Treasures
+    [SerializeField] private GameObject TreasurePrefab;
     
     private void Awake()
     {
         if (Instance != null)
+        {
+            Destroy(this);
+        }
+        else
         {
             Instance = this;
         }
@@ -51,7 +55,7 @@ public class Maze : MonoBehaviour
         Instance = null;
     }
 
-#region Generation
+#region Maze Generation
 
     private void GenerateWithCurrentConfig()
     {
@@ -205,6 +209,15 @@ public class Maze : MonoBehaviour
         }
 
         return 4;
+    }
+
+#endregion
+
+#region Treasure Generation
+
+    private void GenerateTreasures()
+    {
+        
     }
 
 #endregion

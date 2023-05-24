@@ -39,6 +39,11 @@ public class ConfigurationHandler : MonoBehaviour
         MazeConfigUtils.CurrentConfig = loadConfig;
     }
     
+    private void OnDestroy()
+    {
+        Instance = null;
+    }
+    
 #endregion
 
 #region SaveLoad
