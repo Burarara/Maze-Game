@@ -13,8 +13,7 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class ConfigurationHandler : MonoBehaviour
 {
-    public TextAsset ConfigurationSave;
-
+    private string SAVE_FILE;
     public static ConfigurationHandler Instance;
     
 
@@ -30,6 +29,8 @@ public class ConfigurationHandler : MonoBehaviour
         {
             Instance = this;
         }
+        
+        SAVE_FILE = Application.persistentDataPath + "/ConfigurationSave.txt";
     }
 
     private void Start()
@@ -51,16 +52,29 @@ public class ConfigurationHandler : MonoBehaviour
     public void SaveConfig(MazeConfiguration newConfig)
     {
         string saveData = JsonUtility.ToJson(newConfig);
-        File.WriteAllText(Application.dataPath + "/_Assets/Resources/ConfigurationSave.txt", saveData);
+
+        StreamWriter writer = new StreamWriter(SAVE_FILE, false);
+        writer.WriteLine(saveData);
+        writer.Close();
+        
         MazeConfigUtils.CurrentConfig = newConfig;
     }
 
     public MazeConfiguration LoadConfig()
     {
+        if (!File.Exists(SAVE_FILE))
+        {
+            File.WriteAllText(SAVE_FILE, JsonUtility.ToJson(new MazeConfiguration(10, 4, 6)));
+        }
+
+        StreamReader reader = new StreamReader(SAVE_FILE);
+        string loadString = reader.ReadToEnd();
+        reader.Close();
+        
         MazeConfiguration loadConfig;
         try
         {
-            loadConfig = JsonUtility.FromJson<MazeConfiguration>(ConfigurationSave.text);
+            loadConfig = JsonUtility.FromJson<MazeConfiguration>(loadString);
         }
         catch (Exception e)
         {
