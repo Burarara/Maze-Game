@@ -12,9 +12,9 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public void LoadMenu()
+    public void Exit()
     {
-        SceneManager.LoadScene(0);
+        Application.Quit();
     }
 
 #endregion
