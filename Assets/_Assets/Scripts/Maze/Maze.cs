@@ -28,7 +28,8 @@ public class Maze : MonoBehaviour
     [SerializeField] private WallTile[] WallTiles;
 
     //Threats
-    
+    [SerializeField] private List<GameObject> ThreatPrefabs;
+
     //Treasures
     [SerializeField] private GameObject TreasurePrefab;
     

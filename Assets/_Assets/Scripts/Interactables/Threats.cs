@@ -24,6 +24,9 @@ public class Threats : Interactable
         if (damageType != Weakness)
         {
             //Do something if damage does not correlate
+            return;
         }
+        GameplayManager.Instance.EndCombat();
+        Destroy(gameObject);
     }
 }
