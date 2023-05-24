@@ -27,6 +27,9 @@ public class Maze : MonoBehaviour
     [SerializeField] private List<GameObject> Rooms = new List<GameObject>();
     [SerializeField] private WallTile[] WallTiles;
 
+    //Player
+    [SerializeField] private GameObject PlayerPrefab;
+    
     //Threats
     [SerializeField] private List<GameObject> ThreatPrefabs;
 
@@ -49,6 +52,7 @@ public class Maze : MonoBehaviour
     {
         GenerateWithCurrentConfig();
         GenerateVisualWallsAndPaths();
+        GeneratePlaceables();
     }
 
     private void OnDestroy()
@@ -63,11 +67,18 @@ public class Maze : MonoBehaviour
         MazeConfiguration currentConfig = MazeConfigUtils.CurrentConfig;
         //TODO Get rid of this after testing
         if (currentConfig == null)
+        {
             currentConfig = new MazeConfiguration(10, 4, 6);
+            MazeConfigUtils.CurrentConfig = currentConfig;
+        }
+        
+        //Adding 1 to account for the empty room that the player spawns in.
+        int placeableTotal = currentConfig.Threats + currentConfig.Treasures + 1;
+        int roomAmount = placeableTotal > currentConfig.Rooms ? placeableTotal : currentConfig.Rooms;
 
         int lastWalkDir = 4;
         Vector3 currentWalkerPos = Vector3.zero;
-        for (int i = 0; i < currentConfig.Rooms;)
+        for (int i = 0; i < roomAmount;)
         {
             //Pick a random direction to walk in
             int randomDir = Random.Range(0, 4);
@@ -95,8 +106,8 @@ public class Maze : MonoBehaviour
                 paths.wallData[GetOppositeCardinalDirection(lastWalkDir)].isPath = true;
             }
 
-                //Jump out if it's the last room to generate
-            if (i == currentConfig.Rooms - 1)
+            //Jump out if it's the last room to generate
+            if (i == roomAmount - 1)
                 break;
             
             //Move to new direction
@@ -214,13 +225,54 @@ public class Maze : MonoBehaviour
 
 #endregion
 
-#region Treasure Generation
+#region Placeable Generation
 
-    private void GenerateTreasures()
+    private void GeneratePlaceables()
     {
+        MazeConfiguration currentConfig = MazeConfigUtils.CurrentConfig;
+        Vector3 offset = new Vector3(0f, 0f, -0.1f);
+        //Shuffle the room list before placing the assets
+        List<GameObject> shuffledRooms = Shuffle(Rooms);
+
+        //Place player in index 0
+        var newPlayer = Instantiate(PlayerPrefab, shuffledRooms[0].transform.position, Quaternion.identity);
+        newPlayer.transform.position += offset;
+        Camera.main.transform.parent = newPlayer.transform;
+        Camera.main.transform.localPosition = new Vector3(0, 0, -10);
+
+        int roomIndex = 1;
+        //All threats
+        for (int i = 0; i < currentConfig.Threats; i++)
+        {
+            int randomThreat = Random.Range(0, ThreatPrefabs.Count);
+            var newThreat = Instantiate(ThreatPrefabs[randomThreat], shuffledRooms[roomIndex].transform);
+            newThreat.transform.localPosition += offset;
+            roomIndex++;
+        }
+        //All treasures
+        for (int i = 0; i < currentConfig.Treasures; i++)
+        {
+            var newTreasure = Instantiate(TreasurePrefab, shuffledRooms[roomIndex].transform);
+            newTreasure.transform.localPosition += offset;
+            roomIndex++;
+        }
+    }
+
+    private List<T> Shuffle<T>(List<T> listToShuffle)
+    {
+        List<T> listToReturn = listToShuffle;
         
+        for (int i = 0; i < listToReturn.Count; i++)
+        {
+            T temp = listToReturn[i];
+            int randomIndex = Random.Range(i, listToReturn.Count);
+            listToReturn[i] = listToReturn[randomIndex];
+            listToReturn[randomIndex] = temp;
+        }
+
+        return listToReturn;
     }
 
 #endregion
-    
+
 }

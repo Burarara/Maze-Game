@@ -6,6 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Since the treasures and threats will both be interactable it is best that they derive from each other in order to reuse as much code as possible.
 /// This will reduce redundancy and help to keep code clean.
+/// The exit tile also uses this script.
 /// </summary>
 public abstract class Interactable : MonoBehaviour
 {
