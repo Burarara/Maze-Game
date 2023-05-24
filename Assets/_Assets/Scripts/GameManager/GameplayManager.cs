@@ -11,9 +11,14 @@ public class GameplayManager : MonoBehaviour
 
     private Threats currentThreat;
     //UI
+    [SerializeField] private GameObject PauseUI;
+    [SerializeField] private GameObject ResumeUI;
+    [SerializeField] private GameObject GameOverUI;
+    [SerializeField] private TMP_Text FinalTreasureCountUI;
     [SerializeField] private GameObject CombatUI;
     [SerializeField] private TMP_Text TreasureCountUI;
-    
+
+    public bool isGameOver;
     private void Awake()
     {
         if (Instance != null)
@@ -76,6 +81,13 @@ public class GameplayManager : MonoBehaviour
     
 #region Menu Button Callbacks
 
+    public void TogglePauseUI()
+    {
+        var newState = !PauseUI.gameObject.activeSelf;
+        PauseUI.gameObject.SetActive(newState);
+        PlayerControls.CanMove = !newState;
+    }
+
     public void Restart()
     {
         SceneManager.LoadScene(1);
@@ -84,6 +96,16 @@ public class GameplayManager : MonoBehaviour
     public void ReturnToMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void BeginGameOverUI()
+    {
+        PauseUI.SetActive(true);
+        GameOverUI.SetActive(true);
+        ResumeUI.SetActive(false);
+        FinalTreasureCountUI.text = TreasureCountUI.text;
+        PlayerControls.CanMove = false;
+        TreasureCountUI.transform.parent.gameObject.SetActive(false);
     }
 
 #endregion

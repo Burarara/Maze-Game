@@ -56,6 +56,13 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
+    public void OnTogglePauseUI(InputValue value)
+    {
+        if (GameplayManager.Instance.isGameOver)
+            return;
+        GameplayManager.Instance.TogglePauseUI();
+    }
+
 #endregion
     
 }
